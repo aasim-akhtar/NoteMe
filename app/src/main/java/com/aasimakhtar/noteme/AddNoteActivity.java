@@ -6,13 +6,18 @@ import androidx.appcompat.widget.Toolbar;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.widget.TextView;
+
+import java.util.Calendar;
 
 //Activity to add new notes
 public class AddNoteActivity extends AppCompatActivity {
 
     Toolbar toolbar;
     TextView noteTitle,noteDetails;
+    Calendar calendar; //calendar
+    String currentDate,currentTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,5 +51,19 @@ public class AddNoteActivity extends AppCompatActivity {
             }
         });
 
+//        getting current date and time
+        calendar = Calendar.getInstance();
+        currentDate = calendar.get(Calendar.YEAR) +"/"+calendar.get(Calendar.MONTH)+1 +"/"+ calendar.get(calendar.DATE);
+//        currentTime = calendar.get(calendar.HOUR) +":"+calendar.get(Calendar.MINUTE);
+        currentTime = pad(calendar.get(calendar.HOUR)) +":"+pad(calendar.get(Calendar.MINUTE));
+//        pad() is used to get and change something
+        Log.d("calendar", "Date & Time: "+currentDate+" "+currentTime);
+
+    }
+
+    public String pad(int input){
+        if (input<10)
+            return "0"+input;
+        else return String.valueOf(input);
     }
 }
