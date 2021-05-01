@@ -6,7 +6,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class NoteDatabase extends SQLiteOpenHelper {
 //Required for constructor
-    public static final int DATABSE_VERSION = 2;
+    public static final int DATABASE_VERSION = 2;
     public static final String DATABASE_NAME = "notesdb";
     public static final String DATABASE_TABLE = "notestable";
 
@@ -18,7 +18,8 @@ public class NoteDatabase extends SQLiteOpenHelper {
     public static final String KEY_TIME = "time";
 
     NoteDatabase(Context context){
-        super(context,DATABASE_NAME,null,DATABSE_VERSION);
+//        super() constructor used to create database
+        super(context,DATABASE_NAME,null, DATABASE_VERSION);
     }
 
 
@@ -37,6 +38,7 @@ public class NoteDatabase extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+//        changes to new sql version
         if (oldVersion>=newVersion)
             return;
         db.execSQL("DROP TABLE IF EXISTS "+DATABASE_TABLE);

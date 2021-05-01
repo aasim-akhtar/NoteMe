@@ -6,6 +6,7 @@ import androidx.appcompat.widget.Toolbar;
 import android.os.Bundle;
 import android.widget.TextView;
 
+//Activity to add new notes
 public class AddNoteActivity extends AppCompatActivity {
 
     Toolbar toolbar;
@@ -16,7 +17,8 @@ public class AddNoteActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_note);
 
-        setSupportActionBar(toolbar);
+        setSupportActionBar(toolbar); //displays toolbar
+
         noteTitle = findViewById(R.id.noteTitle);
         noteDetails = findViewById(R.id.noteDetails);
 
