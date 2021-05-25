@@ -1,8 +1,10 @@
 package com.aasimakhtar.noteme;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 public class NoteDatabase extends SQLiteOpenHelper {
 //Required for constructor
@@ -27,11 +29,11 @@ public class NoteDatabase extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
 //        create table table_name(id INT PRIMARY KEY, title TEXT,context  TEXT,date TEXT,time TEXT);
 
-        String query = "CREATE TABLE "+ DATABASE_TABLE +"("+ KEY_ID +"INT PRIMARY KEY," +
-                KEY_TITLE + "TEXT,"+
-                KEY_CONTEXT + "TEXT,"+
-                KEY_DATE + "TEXT,"+
-                KEY_TIME + "TEXT" + ")";
+        String query = "CREATE TABLE "+ DATABASE_TABLE +"("+ KEY_ID +" INT PRIMARY KEY," +
+                KEY_TITLE + " TEXT,"+
+                KEY_CONTEXT + " TEXT,"+
+                KEY_DATE + " TEXT,"+
+                KEY_TIME + " TEXT" + ")";
         db.execSQL(query);
 
     }
@@ -44,5 +46,20 @@ public class NoteDatabase extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS "+DATABASE_TABLE);
         onCreate(db);
 
+    }
+
+//    storing data into db
+    public long AddNote(NoteDTO note){
+        SQLiteDatabase db = this.getWritableDatabase(); //writable
+        ContentValues c = new ContentValues(); //creates dictionary like structure for accessing data
+
+        c.put(KEY_TITLE,note.getTitle());
+        c.put(KEY_CONTEXT,note.getContext());
+        c.put(KEY_DATE,note.getDate());
+        c.put(KEY_TIME,note.getTime());
+
+        long ID = db.insert(DATABASE_TABLE,null,c);
+        Log.d("INSERTED", "ID -->"+ ID);
+        return ID;
     }
 }
