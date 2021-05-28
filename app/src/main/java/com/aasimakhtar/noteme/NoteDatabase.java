@@ -2,9 +2,13 @@ package com.aasimakhtar.noteme;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class NoteDatabase extends SQLiteOpenHelper {
 //Required for constructor
@@ -62,4 +66,46 @@ public class NoteDatabase extends SQLiteOpenHelper {
         Log.d("INSERTED", "ID -->"+ ID);
         return ID;
     }
+
+//    fetch one single note from database using note ID
+    public NoteDTO getNote(long id){
+//        select * from databaseTable where id=?
+        SQLiteDatabase db = this.getReadableDatabase();
+//        query returns position which is stored in cursor
+        Cursor cursor = db.query(DATABASE_TABLE,new String[]{KEY_ID,KEY_TITLE,KEY_CONTEXT,KEY_DATE,KEY_TIME},KEY_ID+"=?",
+                new String[]{String.valueOf(id)},null,null,null);
+//        =? used to prevent sqli
+        if (cursor != null){
+//            cursor starts from -1
+            cursor.moveToFirst();
+        }
+//        object used to store note properties, getLong is for id, get string is for name and all others
+        NoteDTO note = new NoteDTO(cursor.getLong(0),cursor.getString(1),cursor.getString(2),
+                cursor.getString(3),cursor.getString(4));
+        return note;
+    }
+
+//    fetch all notes from db
+    public List<NoteDTO> getNotes(){
+        SQLiteDatabase db = this.getReadableDatabase();
+        List<NoteDTO> allNotes = new ArrayList<>();
+//        select * from databasename;
+        String query = "SELECT * FROM "+ DATABASE_TABLE;
+
+        Cursor cursor = db.rawQuery(query,null);
+        if (cursor != null){
+            do {
+                NoteDTO note = new NoteDTO();
+                note.setID(cursor.getLong(0));
+                note.setTitle(cursor.getString(1));
+                note.setContext(cursor.getString(2));
+                note.setDate(cursor.getString(3));
+                note.setTime(cursor.getString(4));
+
+                allNotes.add(note);
+            }while (cursor.moveToNext());
+        }
+        return allNotes;
+    }
+
 }
